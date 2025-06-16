@@ -17,7 +17,7 @@ function CompleteGig() {
         const data = res.data;
         let gigsArray = [];
 
-        // If it's an object (Firebase style), convert it to array
+       
         if (!Array.isArray(data)) {
           gigsArray = Object.entries(data || {}).map(([id, val]) => ({
             id,
@@ -64,7 +64,7 @@ function CompleteGig() {
       toast.success('Gig completed! +1 Credit');
 
       setTimeout(() => {
-        window.location.href = '/wallet'; // redirect
+        window.location.href = '/wallet'; 
       }, 2000);
     } catch {
       toast.error('Something went wrong!');
@@ -103,7 +103,7 @@ function CompleteGig() {
             ))}
           </div>
         ) : (
-          <p className="text-gray-500">No open gigs available.</p>
+          <p className="text-gray-600">No open gigs available.</p>
         )
       ) : (
         <form
