@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -9,66 +8,40 @@ function CompleteGig() {
   const [comment, setComment] = useState('');
   const [file, setFile] = useState(null);
 
-  // Fetch gigs
+  // Simulate fetching gigs (replace backend call with demo data)
   useEffect(() => {
-    axios
-      .get('/api/gigs?status=open')
-      .then((res) => {
-        const data = res.data;
-        let gigsArray = [];
-
-       
-        if (!Array.isArray(data)) {
-          gigsArray = Object.entries(data || {}).map(([id, val]) => ({
-            id,
-            ...val,
-          }));
-        } else {
-          gigsArray = data;
-        }
-
-        setGigs(gigsArray);
-      })
-      .catch(() => toast.error('Failed to load gigs'));
+    const demoGigs = [
+      {
+        id: 'gig1',
+        title: 'Design a logo',
+        description: 'Create a simple logo for a local startup',
+        bounty: '1',
+      },
+      {
+        id: 'gig2',
+        title: 'Write a blog post',
+        description: 'Write a 150-word blog post on AI in education',
+        bounty: '1',
+      },
+    ];
+    setGigs(demoGigs);
   }, []);
 
-  // Accept a gig
-  const handleAccept = async (gig) => {
-    try {
-      await axios.post(`/api/gigs/${gig.id}/accept`);
-      setAcceptedGig(gig);
-      toast.success('Gig accepted!');
-    } catch {
-      toast.error('Failed to accept gig');
-    }
+  const handleAccept = (gig) => {
+    setAcceptedGig(gig);
+    toast.success('Gig accepted!');
   };
 
-  // Submit completed gig
-  const handleComplete = async (e) => {
+  const handleComplete = (e) => {
     e.preventDefault();
 
     if (!file) return toast.error('Please upload a file');
 
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('comment', comment);
+    toast.success('Gig completed! +1 Credit');
 
-      await axios.post(`/api/gigs/${acceptedGig.id}/complete`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      await axios.post('/api/credits');
-      toast.success('Gig completed! +1 Credit');
-
-      setTimeout(() => {
-        window.location.href = '/wallet'; 
-      }, 2000);
-    } catch {
-      toast.error('Something went wrong!');
-    }
+    setTimeout(() => {
+      window.location.href = '/wallet';
+    }, 2000);
   };
 
   return (
